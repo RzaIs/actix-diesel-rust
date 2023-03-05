@@ -11,18 +11,14 @@ pub struct Secrets {
 }
 
 #[derive(Deserialize)]
-pub struct ServerConfig {
-    pub host: String,
-    pub port: u32,
+pub struct Settings {
     pub pool_size: u32,
     pub rust_log: String
 }
 
 impl Secrets {
     pub fn from_env() -> Self {
-        let env = Environment::with_prefix("secret")
-            .prefix_separator("_");
-
+        let env = Environment::default();
         Config::builder()
             .add_source(env)
             .build()
@@ -32,9 +28,9 @@ impl Secrets {
     }
 }
 
-impl ServerConfig {
+impl Settings {
     pub fn from_env() -> Self {
-        let env = Environment::with_prefix("server")
+        let env = Environment::with_prefix("setting")
             .prefix_separator("_");
 
         Config::builder()
@@ -42,6 +38,6 @@ impl ServerConfig {
             .build()
             .expect("Error in building Config from env")
             .try_deserialize()
-            .expect("Error in deserializing ServerConfig from Config")
+            .expect("Error in deserializing Settings from Config")
     }
 }
